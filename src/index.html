@@ -1,0 +1,148 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <title>Neon Skyway</title>
+  <meta name="description" content="Fly a hover car through a rainy neon city. Dodge traffic, thread security gates, chain near misses.">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@500;700;900&family=Share+Tech+Mono&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="style.css">
+  <script type="importmap">
+    {
+      "imports": {
+        "three": "https://cdn.jsdelivr.net/npm/three@0.169.0/build/three.module.js",
+        "three/addons/": "https://cdn.jsdelivr.net/npm/three@0.169.0/examples/jsm/"
+      }
+    }
+  </script>
+</head>
+<body>
+<div id="stage">
+  <canvas id="scene"></canvas>
+  <div id="flash"></div>
+  <div id="vignette"></div>
+
+  <!-- in-game HUD -->
+  <div id="hud" class="hidden">
+    <div class="hud-tl">
+      <div class="label">SCORE</div>
+      <div id="score" class="big">0</div>
+      <div id="combo" class="combo">x1</div>
+    </div>
+    <div class="hud-tc">
+      <div id="dist">0.00 KM</div>
+      <div id="warn" class="warn hidden">⚠ SECURITY GATE ・ 検問</div>
+    </div>
+    <div class="hud-tr">
+      <div><span id="speed" class="big">0</span><small>KM/H</small></div>
+      <div class="bar speedbar"><i id="speedfill"></i></div>
+    </div>
+    <div class="hud-bl">
+      <div class="label">SHIELD</div>
+      <div id="shields" class="shields"><b></b><b></b><b></b></div>
+      <div class="label">BOOST <span class="key">SHIFT</span></div>
+      <div id="boostbar" class="bar boostbar"><i id="boostfill"></i></div>
+    </div>
+    <button id="pauseBtn" class="icon-btn" type="button" aria-label="Pause">II</button>
+    <button id="boostBtn" class="touch-btn" type="button">BOOST</button>
+    <div id="popups"></div>
+  </div>
+
+  <!-- screens -->
+  <section id="menu" class="screen">
+    <div class="panel">
+      <div class="jp">ネオン・スカイウェイ</div>
+      <h1>NEON <span>SKYWAY</span></h1>
+      <div class="credit">by <b>@AI-Smjho</b></div>
+      <p class="tag">Fly the hover car through the rain. Dodge traffic, thread the security gates, chain near misses.</p>
+      <button class="play" data-action="start" type="button">FLY <small>ENTER</small></button>
+      <div class="sublabel">CAR · SCREEN</div>
+      <div class="row2">
+        <div class="livery">
+          <button type="button" data-action="livery-prev" aria-label="Previous paint">◀</button>
+          <span id="liveryName">CHROME</span>
+          <button type="button" data-action="livery-next" aria-label="Next paint">▶</button>
+        </div>
+        <button class="ratio" type="button" data-action="ratio" title="Switch between 16:9 and vertical 9:16 (V)">16:9</button>
+      </div>
+      <div class="best">BEST <span id="bestMenu">0</span></div>
+      <div class="controls">
+        <div><kbd>W A S D</kbd> / <kbd>ARROWS</kbd><span>Steer and climb</span></div>
+        <div><kbd>SHIFT</kbd> / <kbd>SPACE</kbd><span>Boost</span></div>
+        <div><kbd>V</kbd><span>9:16 vertical / 16:9</span></div>
+        <div><kbd>R</kbd><span>Record a clip (saves video)</span></div>
+        <div><kbd>H</kbd><span>Hide HUD for clean footage</span></div>
+        <div><kbd>P</kbd> / <kbd>ESC</kbd> · <kbd>M</kbd><span>Pause · Sound</span></div>
+        <div class="touch-only"><kbd>DRAG</kbd><span>Steer · hold BOOST button</span></div>
+      </div>
+      <div class="legend">
+        <span><i class="dot cyan"></i>Orb +100</span>
+        <span><i class="dot gold"></i>Boost cell</span>
+        <span><i class="dot green"></i>Shield</span>
+        <span><i class="dot red"></i>Gates: fly through the green gap</span>
+      </div>
+    </div>
+  </section>
+
+  <section id="pause" class="screen hidden">
+    <div class="panel small">
+      <h2>PAUSED</h2>
+      <button class="play" data-action="resume" type="button">RESUME <small>P</small></button>
+      <button class="ghost" data-action="ratio" type="button">16:9</button>
+      <button class="ghost" data-action="menu" type="button">MAIN MENU</button>
+    </div>
+  </section>
+
+  <section id="over" class="screen hidden">
+    <div class="panel small">
+      <div class="jp">墜落</div>
+      <h2>CRASHED</h2>
+      <div id="newBest" class="newbest hidden">NEW BEST</div>
+      <div class="final"><span id="finalScore">0</span><small>POINTS</small></div>
+      <div class="stats">
+        <div><span id="stDist">0</span><small>KM</small></div>
+        <div><span id="stOrbs">0</span><small>ORBS</small></div>
+        <div><span id="stNear">0</span><small>NEAR MISSES</small></div>
+        <div><span id="stGates">0</span><small>GATES</small></div>
+      </div>
+      <div class="best">BEST <span id="bestOver">0</span></div>
+      <div class="credit small">@AI-Smjho</div>
+      <button class="play" data-action="start" type="button">FLY AGAIN <small>ENTER</small></button>
+      <button class="ghost" data-action="menu" type="button">MAIN MENU</button>
+    </div>
+  </section>
+
+  <section id="export" class="screen hidden">
+    <div class="panel small">
+      <div class="jp">録画</div>
+      <h2>SAVE CLIP</h2>
+      <p id="exInfo" class="tag"></p>
+      <div id="exChoices">
+        <button class="play" data-action="export-4k" type="button">4K · 60 FPS</button>
+        <button class="ghost" data-action="export-1080" type="button">1080P · 60 FPS (FASTER)</button>
+        <button class="ghost" data-action="export-discard" type="button">DISCARD</button>
+      </div>
+      <div id="exProgress" class="hidden">
+        <div class="bar exbar"><i id="exFill"></i></div>
+        <div id="exText" class="extext">Rendering...</div>
+        <button class="ghost" data-action="export-cancel" type="button">CANCEL</button>
+      </div>
+    </div>
+  </section>
+
+  <!-- channel badge: shown while flying, and drawn the same way into exported clips -->
+  <div id="brand" class="brand" aria-label="@AI-Smjho">
+    <div class="brand-mark"><span>AI</span></div>
+    <div class="brand-text"><b>@AI-Smjho</b><small>NEON SKYWAY ・ ネオン</small></div>
+  </div>
+  <div id="recBadge" class="rec-badge hidden"><i></i>REC <span id="recTime">00:00</span></div>
+  <div id="soundHint" class="sound-hint">🔊 CLICK OR PRESS ANY KEY FOR SOUND</div>
+  <button id="recBtn" class="icon-btn" type="button" aria-label="Record a clip" title="Record a clip (R)"></button>
+  <button id="muteBtn" class="icon-btn mute" type="button" aria-label="Toggle sound">♪</button>
+</div>
+
+  <script type="module" src="main.js"></script>
+</body>
+</html>

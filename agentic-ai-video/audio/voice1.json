@@ -1,0 +1,47 @@
+[
+ {
+  "word": "Normal",
+  "start": 0.090916,
+  "end": 0.511374
+ },
+ {
+  "word": "AI",
+  "start": 0.647708,
+  "end": 0.954541
+ },
+ {
+  "word": "answers",
+  "start": 0.954541,
+  "end": 1.352249
+ },
+ {
+  "word": "questions",
+  "start": 1.352291,
+  "end": 1.840916
+ },
+ {
+  "word": "Agentic",
+  "start": 2.204541,
+  "end": 2.647707
+ },
+ {
+  "word": "AI",
+  "start": 2.715916,
+  "end": 3.272749
+ },
+ {
+  "word": "does",
+  "start": 3.477291,
+  "end": 3.715916
+ },
+ {
+  "word": "the",
+  "start": 3.727291,
+  "end": 3.806832
+ },
+ {
+  "word": "work",
+  "start": 3.818166,
+  "end": 4.238624
+ }
+]

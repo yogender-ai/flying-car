@@ -1,0 +1,62 @@
+[
+ {
+  "word": "It",
+  "start": 0.079541,
+  "end": 0.147707
+ },
+ {
+  "word": "plans",
+  "start": 0.147708,
+  "end": 0.499999
+ },
+ {
+  "word": "the",
+  "start": 0.5,
+  "end": 0.579541
+ },
+ {
+  "word": "steps",
+  "start": 0.579541,
+  "end": 1.159082
+ },
+ {
+  "word": "and",
+  "start": 1.352291,
+  "end": 1.465916
+ },
+ {
+  "word": "uses",
+  "start": 1.465916,
+  "end": 1.874999
+ },
+ {
+  "word": "real",
+  "start": 1.886375,
+  "end": 2.215916
+ },
+ {
+  "word": "tools",
+  "start": 2.227291,
+  "end": 2.715916
+ },
+ {
+  "word": "email",
+  "start": 3.147708,
+  "end": 3.602249
+ },
+ {
+  "word": "calendar",
+  "start": 3.818166,
+  "end": 4.318166
+ },
+ {
+  "word": "the",
+  "start": 4.5,
+  "end": 4.579541
+ },
+ {
+  "word": "web",
+  "start": 4.590916,
+  "end": 4.897749
+ }
+]
